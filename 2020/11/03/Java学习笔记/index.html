@@ -1,156 +1,31 @@
-<!DOCTYPE html>
-<html>
+extends includes/layout.pug
 
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<meta name="theme-color" content="#33474d">
-	<title>Java学习笔记（Ⅰ） | Aspirin</title>
-	<link rel="stylesheet" href="/css/style.css" />
-	
-      <link rel="alternate" href="/atom.xml" title="Aspirin" type="application/atom+xml">
-    
-<meta name="generator" content="Hexo 5.2.0"></head>
+block content
+  #post
+    if top_img === false
+      include includes/header/post-info.pug
 
-<body>
+    article#article-container.post-content!=page.content
+    include includes/post/post-copyright.pug
+    .tag_share
+      if (theme.post_meta.post.tags)
+        .post-meta__tag-list
+          each item, index in page.tags.data
+            a(href=url_for(item.path)).post-meta__tags #[=item.name]
+      include includes/third-party/share/index.pug
+        
+    if theme.reward.enable
+      !=partial('includes/post/reward', {}, {cache:theme.fragment_cache})
 
-	<header class="header">
-		<nav class="header__nav">
-			
-				<a href="/archives" class="header__link">Archive</a>
-			
-				<a href="/tags" class="header__link">Tags</a>
-			
-				<a href="/atom.xml" class="header__link">RSS</a>
-			
-		</nav>
-		<h1 class="header__title"><a href="/">Aspirin</a></h1>
-		<h2 class="header__subtitle">He's blogs</h2>
-	</header>
+    //- ad
+    if theme.ad && theme.ad.post
+      .post-ad!=theme.ad.post
 
-	<main>
-		<article>
-	
-		<h1>Java学习笔记（Ⅰ）</h1>
-	
-	<div class="article__infos">
-		<span class="article__date">2020-11-03</span><br />
-		
-		
-	</div>
+    include includes/pagination.pug
+    if theme.related_post && theme.related_post.enable
+      != related_posts(page,site.posts)
 
-	
-
-	
-		<blockquote>
-<p>一直想把Kalman Filter的内容整理出来，但总是犯懒。那就先做个预告，这周之内整理出来Kalman Filter，在考试周的空余时间整理出Extended Kalman Filter。KF主要是翻译自一个国外的博文<a target="_blank" rel="noopener" href="http://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/">http://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/</a> 。</p>
-<p>这几天先总结一下每天的Java争取做到日更，也顺便当做Markdown的练手。回头还要更新一下Hexo的主题；至于用树莓派搭建服务器，等闲的时候再搞。</p>
-<p>忍不住吐槽一下，hexo默认主题下blog最终的展示效果太丑了！！</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th align="left">输入与输出</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">循环和选择</td>
-</tr>
-<tr>
-<td align="left">时钟</td>
-</tr>
-<tr>
-<td align="left">节拍器（计数）</td>
-</tr>
-</tbody></table>
-<h2 id="输入与输出"><a href="#输入与输出" class="headerlink" title="输入与输出"></a>输入与输出</h2><ul>
-<li>举个栗子，输出变量a。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(a);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>输出一段字符。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="string">&quot;Hello java！&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>输出变量与字符的混合，则在引号与变量之间直接添加加号。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int a &#x3D; 5;</span><br><span class="line">System.out.println(&quot;Five is &quot; + 5);</span><br></pre></td></tr></table></figure>
-
-<p>输出：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Five is <span class="number">5</span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>混合输出的例子</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">hello</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">		Scanner input = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">		<span class="keyword">double</span> a = input.nextDouble();</span><br><span class="line">		<span class="keyword">int</span> b = input.nextInt();</span><br><span class="line">		System.out.println(a+<span class="string">&quot; + &quot;</span>+b+<span class="string">&quot; = &quot;</span>+ (a+b));</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>输入：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">5.1</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
-
-<p>输出：（注意空格）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">5.1 + 3 &#x3D; 8.1</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="循环和选择"><a href="#循环和选择" class="headerlink" title="循环和选择"></a>循环和选择</h2><p>与c竟然一模一样！偷个懒不看了，有的话再补充。</p>
-<p>Java好多语法和C一个样，回头可以整理一下。</p>
-<h2 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h2><p>每秒刷新显示一下当前Greenwich时间。因为存在时差，所以需要+8h。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">hello</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">		clock refresh per sec</span><br><span class="line">		<span class="keyword">long</span> a = <span class="number">61</span>;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">			<span class="keyword">long</span> time = System.currentTimeMillis();</span><br><span class="line">			<span class="keyword">long</span> totalSeconds = time/<span class="number">1000</span>;</span><br><span class="line">			<span class="keyword">long</span> currentSecond = totalSeconds%<span class="number">60</span>;</span><br><span class="line">			<span class="keyword">long</span> totalMinutes = totalSeconds/<span class="number">60</span>;</span><br><span class="line">			<span class="keyword">long</span> currentMinute = totalMinutes%<span class="number">60</span>;</span><br><span class="line">			<span class="keyword">long</span> totalHours = totalMinutes/<span class="number">60</span>;</span><br><span class="line">			<span class="keyword">long</span> currentHour = (totalHours%<span class="number">24</span>+<span class="number">8</span>)%<span class="number">24</span>;</span><br><span class="line">			<span class="keyword">if</span>(a!=currentSecond)&#123;</span><br><span class="line">				a = currentSecond;</span><br><span class="line">				System.out.println(<span class="string">&quot;Time is &quot;</span>+currentHour+<span class="string">&quot;:&quot;</span>+currentMinute+<span class="string">&quot;:&quot;</span>+a+<span class="string">&quot; GMT&quot;</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;	</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="节拍器（计数）"><a href="#节拍器（计数）" class="headerlink" title="节拍器（计数）"></a>节拍器（计数）</h2><p>输入周期T(ms)，之后每隔时间T，计数一次。</p>
-<p>存在一些bug，会溢出。高频率下计数不够多。（我太菜了，整理的时候才发现，懒得改了，明天改。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">hello</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">		Scanner input = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">		System.out.println(<span class="string">&quot;Please input the T/ms&quot;</span>);</span><br><span class="line">		<span class="keyword">int</span> a = input.nextInt();</span><br><span class="line">		<span class="keyword">long</span> b = System.currentTimeMillis();</span><br><span class="line">		<span class="keyword">long</span> c = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">			<span class="keyword">long</span> time = System.currentTimeMillis();</span><br><span class="line">			<span class="keyword">if</span>(time==(b+a))&#123;</span><br><span class="line">				b = time;</span><br><span class="line">				System.out.println(++c);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-	
-
-	
-		<span class="different-posts"><a href="/2020/11/03/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" onclick="window.history.go(-1); return false;">⬅️ Go back </a></span>
-
-	
-
-</article>
-
-	</main>
-
-	<footer class="footer">
-	<div class="footer-content">
-		
-	      <div class="footer__element">
-	<p>Hi there, <br />welcome to my Blog glad you found it. Have a look around, will you?</p>
-</div>
-
-	    
-	      <div class="footer__element">
-	<h5>Check out</h5>
-	<ul class="footer-links">
-		<li class="footer-links__link"><a href="/archives">Archive</a></li>
-		
-		  <li class="footer-links__link"><a href="/atom.xml">RSS</a></li>
-	    
-		<li class="footer-links__link"><a href="/about">about page</a></li>
-		<li class="footer-links__link"><a href="/tags">Tags</a></li>
-		<li class="footer-links__link"><a href="/categories">Categories</a></li>
-	</ul>
-</div>
-
-	    
-
-		<div class="footer-credit">
-			<span>© 2020 Bohao He | Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> | Theme <a target="_blank" rel="noopener" href="https://github.com/HoverBaum/meilidu-hexo">MeiliDu</a></span>
-		</div>
-
-	</div>
-
-
-</footer>
-
-
-
-</body>
-
-</html>
+    if page.comments !== false && theme.comments && theme.comments.use
+      - var commentsJsLoad = true
+      !=partial('includes/third-party/comments/index', {}, {cache:theme.fragment_cache})
+      
